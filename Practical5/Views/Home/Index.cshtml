@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+            enables a clean separation of concerns and gives you full control over markup
+            for enjoyable, agile development.
+        </p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Get more libraries</h2>
+        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Web Hosting</h2>
+        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    </div>
+</div>
+
+<!-- Add the table with the list of people here -->
+<h2>List of People</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Age</th>
+            <th>Living Status</th>
+            <th>Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var person in Model)
+        {
+        <tr>
+            <td>@person.FirstName</td>
+            <td>@person.LastName</td>
+            <td>@person.Age</td>
+            <td>@(person.IsAlive ? "Alive" : "Deceased")</td>
+            <td>
+                <a href="@Url.Content(person.myLink)" class="btn btn-primary">LINK</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<!-- Add these buttons below the table -->
+<div class="btn-group mt-3">
+    <button id="saveBtn" class="btn btn-success">Save to Local Storage</button>
+    <button id="loadBtn" class="btn btn-primary">Load from Local Storage</button>
+    <button id="clearBtn" class="btn btn-danger">Clear Local Storage</button>
+</div>
+@section Scripts {
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const searchText = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#peopleTable tbody tr');
+
+            rows.forEach(row => {
+                const firstName = row.cells[0].textContent.toLowerCase();
+                if (firstName.includes(searchText)) {
+                    row.style.color = 'red';
+                    setTimeout(() => {
+                        row.style.color = '';
+                    }, 3000);
+                }
+            });
+        });
+          // NEW LOCAL STORAGE CODE GOES HERE:
+        document.getElementById('saveBtn').addEventListener('click', function() {
+            const peopleData = @Html.Raw(Json.Encode(Model));
+            localStorage.setItem('peopleData', JSON.stringify(peopleData));
+            alert('Data saved!');
+        });
+
+        document.getElementById('loadBtn').addEventListener('click', function() {
+            const savedData = localStorage.getItem('peopleData');
+            if (savedData) {
+                window.location.href = '@Url.Action("LoadFromStorage", "People")';
+            } else {
+                alert('No saved data found!');
+            }
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            localStorage.clear();
+            alert('Local storage cleared!');
+        });
+    </script>
+}

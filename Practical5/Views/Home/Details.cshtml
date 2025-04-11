@@ -1,0 +1,63 @@
+@model INF272Lecture4v1.Models.PersonModel
+
+<div class="tab-container">
+    <div class="tab-buttons">
+        <button class="tab-btn" data-tab="info">Basic Info</button>
+        <button class="tab-btn" data-tab="hobbies">Hobbies</button>
+        <button class="tab-btn" data-tab="modules">Modules</button>
+    </div>
+
+    <div class="tab-content" id="info">
+        <h3>Basic Info</h3>
+        <p>Name: @Model.FirstName @Model.LastName</p>
+        <p>Age: @Model.Age</p>
+        <p>Status: @(Model.IsAlive ? "Alive" : "Deceased")</p>
+    </div>
+
+    <div class="tab-content" id="hobbies" style="display:none;">
+        <h3>Hobbies</h3>
+        <p>No hobbies specified.</p>
+    </div>
+
+    <div class="tab-content" id="modules" style="display:none;">
+        <h3>Modules</h3>
+        <p>No modules specified.</p>
+    </div>
+</div>
+
+<style>
+    .tab-buttons {
+        margin-bottom: 15px;
+    }
+
+    .tab-btn {
+        padding: 8px 16px;
+        background: #eee;
+        border: none;
+        cursor: pointer;
+    }
+
+        .tab-btn:hover {
+            background: #ddd;
+        }
+
+    .tab-content {
+        padding: 15px;
+        border: 1px solid #ddd;
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.tab-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+
+            // Show selected tab
+            const tabId = this.getAttribute('data-tab');
+            document.getElementById(tabId).style.display = 'block';
+        });
+    });
+</script>
